@@ -46,6 +46,7 @@ def configure(keymap):
 
     def set_mark():
         variables.is_marked = ~variables.is_marked
+
     def esc():
         keymap.InputKeyCommand('Esc')
         variables.is_marked = False
@@ -68,6 +69,13 @@ def configure(keymap):
     @mark
     def to_end():
         keymap.InputKeyCommand('End')()
+    @mark
+    def to_forward_char():
+        keymap.InputKeyCommand('LC-Right')()
+    @mark
+    def to_backward_char():
+        keymap.InputKeyCommand('LC-Left')()
+
     
     def delete_back():
         keymap.InputKeyCommand('Back')()
@@ -106,6 +114,8 @@ def configure(keymap):
     
     #スペースキーのみを押した時は本来の動作をする
     keymap_global[ "O-236" ] = "Space"
+    # 連続スペース
+    keymap_global["User1-b"] = "Space"
 
     # 高速変換対応
     keymap_global["User1-Enter"] = keymap.InputKeyCommand("Space", "Enter")
@@ -117,13 +127,18 @@ def configure(keymap):
     keymap_global["User1-l"] = forward # "Right" 
     keymap_global["User1-u"] = to_home 
     keymap_global["User1-o"] = to_end
+    keymap_global["User1-Comma"] = to_backward_char
+    keymap_global["User1-Period"] = to_forward_char
 
     keymap_global["User1-Semicolon"] = kill_line
 
     # set_mark
-    keymap_global["User1-a"] = set_mark
+    keymap_global["User1-f"] = set_mark
+    keymap_global['User1-Caps'] = set_mark
+
     # escでreset_mark
     keymap_global["Esc"] = esc
+    keymap_global["User1-g"]  = "Esc"
     
     # 削除
     keymap_global["User1-h"] = delete_back 
@@ -134,6 +149,6 @@ def configure(keymap):
     keymap_global["User1-c"] = copy
     keymap_global["User1-v"] = paste
 
+    # 特殊
     keymap_global["User1-z"] = "C-z"
-
     keymap_global["User1-t"] = alphabetize
